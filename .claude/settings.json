@@ -1,0 +1,187 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(pnpm *)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch *)",
+      "Bash(git switch *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git stash *)",
+      "Bash(git show *)",
+      "Bash(git rev-parse *)",
+      "Bash(git merge-base *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(gh issue *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh api *)",
+      "Bash(echo *)",
+      "Bash(wc *)",
+      "Bash(which *)",
+      "Bash(ls *)",
+      "Bash(python3 --version)",
+      "Bash(node --version)",
+      "Bash(pnpm --version)",
+      "Bash(git --version)",
+      "Bash(jq *)",
+      "Bash(grep *)",
+      "Bash(sort *)",
+      "Bash(find *)",
+      "Bash(xargs *)",
+      "Bash(awk *)",
+      "Bash(sed *)",
+      "Bash(cut *)",
+      "Bash(tr *)",
+      "Bash(uniq *)",
+      "Bash(diff *)",
+      "Bash(tee *)",
+      "Write(/tmp/**)"
+    ],
+    "deny": [
+      "Bash(rm *)",
+      "Bash(rm -r *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(rmdir *)",
+      "Bash(unlink *)",
+      "Bash(shred *)",
+      "Bash(find * -delete*)",
+      "Bash(rsync * --delete*)",
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)",
+      "Bash(osascript *)",
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(nc *)",
+      "Bash(ncat *)",
+      "Bash(telnet *)",
+      "Bash(open *)",
+      "Bash(security *)",
+      "Bash(pbcopy *)",
+      "Bash(pbpaste *)",
+      "Bash(* .env*)",
+      "Bash(* ~/.ssh/*)",
+      "Bash(* ~/.aws/*)",
+      "Bash(* ~/.config/gh/*)",
+      "Bash(* ~/.git-credentials)",
+      "Bash(* ~/.netrc)",
+      "Bash(* ~/.npmrc)",
+      "Read(./.env)",
+      "Edit(./.env)",
+      "Write(./.env)",
+      "Read(./.env.*)",
+      "Edit(./.env.*)",
+      "Write(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Write(docs/superpowers/**)",
+      "Edit(docs/superpowers/**)",
+      "Read(/secrets/**)",
+      "Edit(/secrets/**)",
+      "Write(/secrets/**)",
+      "Read(~/.netrc)",
+      "Read(~/.npmrc)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.git-credentials)",
+      "Read(~/.config/gh/**)",
+      "Edit(~/.zshrc)",
+      "Write(~/.zshrc)",
+      "Edit(~/.bashrc)",
+      "Write(~/.bashrc)"
+    ],
+    "disableBypassPermissionsMode": "disable"
+  },
+  "enableAllProjectMcpServers": false,
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y ccstatusline@latest",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "serena@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "code-review@context-engineering-kit": true,
+    "docs@context-engineering-kit": true,
+    "kaizen@context-engineering-kit": true
+  },
+  "alwaysThinkingEnabled": true,
+  "cleanupPeriodDays": 7,
+  "mcp_tool_search_auto": 15,
+  "effortLevel": "medium",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command // \"\"' | grep -q -- '--no-verify' && printf '{\"continue\":false,\"stopReason\":\"--no-verify は禁止されています。pre-commit フックをバイパスするコミットは許可されません。\"}' || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/detect-feedback.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "DIR=$(basename \"$PWD\") && osascript -e \"display notification \\\"[$DIR] Claude Code の対応が完了しました\\\" with title \\\"Claude Code\\\" sound name \\\"Glass\\\"\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "DIR=$(basename \"$PWD\") && osascript -e \"display notification \\\"[$DIR] Claude Code がユーザーの入力を待っています\\\" with title \\\"Claude Code\\\" sound name \\\"Glass\\\"\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/record-rejection.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "plansDirectory": "./tmp/plans"
+}
