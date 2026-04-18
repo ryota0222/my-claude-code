@@ -1,0 +1,15 @@
+{
+  "default": true,
+  // MD013: line-length — 80文字制限。自然文・日本語の説明では冗長なため無効化
+  "MD013": false,
+  // MD026: no-trailing-punctuation — 見出し末尾の記号禁止。"FEの場合のフォーマット:" 等を許容するため無効化
+  "MD026": false,
+  // MD031: blanks-around-fences — コードブロック前後の空行必須。リスト内にネストしたコードで不便なため無効化
+  "MD031": false,
+  // MD040: fenced-code-language — コードブロックに言語指定必須。コミット例など出力サンプルで不要なため無効化
+  "MD040": false,
+  // MD041: first-line-heading — 先頭行がH1である必要。frontmatterのみで始まるagent定義ファイルを許容するため無効化
+  "MD041": false,
+  // MD060: table-column-style — テーブルのパイプ前後空白スタイル強制(v23新規)
+  "MD060": true
+}
