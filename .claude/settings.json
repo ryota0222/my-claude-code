@@ -44,7 +44,11 @@
       "Bash(uniq *)",
       "Bash(diff *)",
       "Bash(tee *)",
-      "Write(/tmp/**)"
+      "Write(/tmp/**)",
+      "Edit(./.env.example)",
+      "Write(./.env.example)",
+      "Edit(./**/.env.example)",
+      "Write(./**/.env.example)"
     ],
     "deny": [
       "Bash(rm *)",
@@ -82,11 +86,11 @@
       "Read(./.env)",
       "Edit(./.env)",
       "Write(./.env)",
-      "Read(./.env.*)",
-      "Edit(./.env.*)",
-      "Write(./.env.*)",
+      "Read(./.env*.local)",
+      "Edit(./.env*.local)",
+      "Write(./.env*.local)",
       "Read(./**/.env)",
-      "Read(./**/.env.*)",
+      "Read(./**/.env*.local)",
       "Write(docs/superpowers/**)",
       "Edit(docs/superpowers/**)",
       "Read(/secrets/**)",
