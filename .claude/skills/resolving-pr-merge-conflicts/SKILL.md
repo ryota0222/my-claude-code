@@ -87,7 +87,7 @@ pnpm test
 ## Common Mistakes
 
 | Mistake | Fix |
-|---|---|
+| --- | --- |
 | Starting without a named target branch | Ask the user which PR/branch first; never guess |
 | Resolving on `main` / base branch | Check out the HEAD (PR) branch; merge base into it |
 | Hand-editing lockfile | Regenerate from resolved `package.json` |
