@@ -3,21 +3,21 @@ name: create-pr-description
 description: Use when running `/create-pr-description`, or when the user asks to write a PR description. Analyzes branch commits and generates a Japanese PR title and description with appropriate sections based on FE/BE detection. Does NOT create the PR - only proposes the content.
 ---
 
-# Create PR Description Skill
+# PR Description Skill
 
-Proposes a Japanese PR title and description based on the commits of the current branch. Does NOT create the PR.
+Proposes a Japanese PR title and description from the commits on the current branch. Does not create the PR.
 
 ## Procedure
 
-### Step 1: Gather branch info
+### Step 1: Collect branch information
 
-Run these in parallel:
+Run the following in parallel:
 
 ```bash
 # All commits since the base branch
 git log main..HEAD --oneline
 
-# Overview of the diff
+# Overall shape of the changes
 git diff main...HEAD --stat
 
 # Current branch name
@@ -26,28 +26,28 @@ git branch --show-current
 # Remote state
 git status
 
-# Detect TODO comments inside the diff
+# TODO comments inside the diff
 git diff main...HEAD | grep -n "^+.*TODO"
 ```
 
 ### Step 2: Detect FE/BE
 
-Decide based on file extensions, paths, and overall project layout:
+Judge holistically from the file extensions, paths, and project layout of the changed files:
 
-| Signal | Classification |
+| Signal | Verdict |
 | --- | --- |
 | `.tsx`, `.jsx`, `.vue`, `.svelte`, `next.config`, `nuxt.config`, `vite.config`, `src/components/`, `src/pages/`, `public/` | **FE** |
 | `.go`, `.py`, `.rb`, `.java`, `.rs`, `internal/`, `cmd/`, `api/`, `server/`, `migrations/`, `Dockerfile` | **BE** |
-| `package.json`, `.ts`, `.js` | **Context-dependent** (FE if UI, BE if server-side) |
-| Both present | **FE+BE** |
+| `package.json`, `.ts`, `.js` | **Decide from context** (FE for UI components, BE for server-side) |
+| Both are present | **FE+BE** |
 
-When in doubt, check the repo's README or `package.json` dependencies for the tech stack.
+When the verdict is unclear, check the technology stack from the repository README or the dependencies in `package.json`.
 
 ### Step 3: Generate the PR description
 
-Use the format below. Analyze commits and summarize the **purpose and overview** of the change concisely.
+Generate it in the following format. Analyze the commits and summarize the **purpose and outline of the change** concisely.
 
-#### FE format:
+#### Format for FE:
 
 ```markdown
 ## 概要
@@ -66,7 +66,7 @@ Use the format below. Analyze commits and summarize the **purpose and overview**
 - `ファイルパス`: TODOコメントの内容
 ```
 
-#### BE format:
+#### Format for BE:
 
 ```markdown
 ## 概要
@@ -81,14 +81,14 @@ Use the format below. Analyze commits and summarize the **purpose and overview**
 
 ### Step 4: Present the proposal
 
-Show the PR title and description to the user. Do NOT run `gh pr create` or push.
+Present the PR title and description to the user. Do not create the PR (`gh pr create` or push).
 
 ## Rules
 
-- PR title: within 70 characters, concise Japanese
-- Do not just enumerate commit messages; summarize the **purpose** of the change
-- The 概要 section explains *why* the change is needed
-- The 変更内容 section lists technical changes as bullets
-- For FE, always include the 画面キャプチャ section. Ask the user how many screens to include before deciding the table's column count
-- If the diff contains TODO comments, list the file path and TODO text in the 備考 section. If there are none, omit that section
-- Do not include TODO lists, test checklists, or review-point sections
+- Keep the PR title within 70 characters and write it concisely in Japanese
+- Do not simply list the commit messages. Summarize the **purpose** of the change
+- The 概要 section states why the change is needed
+- The 変更内容 section lists the technical changes as bullet points
+- Always include the 画面キャプチャ section for an FE verdict. Confirm the number of table columns (how many screens to attach) with the user before deciding
+- When the diff contains TODO comments, record the file path and TODO content in the 備考 section. Omit the 備考 section when there is no TODO
+- Do not include TODO lists, test checklists, or review points

@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Create Conventional Commits messages written in Japanese. Use when making a commit, when `/commit` is invoked, or when the user asks for a commit message. Analyzes `git diff` and generates an appropriate type, scope, and description in Japanese.
+description: Creates Japanese commit messages that follow the Conventional Commits specification. Use when creating a commit, when `/commit` is run, or when the user asks for a commit message ("コミットメッセージ"). Analyzes the git diff and generates an appropriate type, scope, and Japanese description.
 ---
 
 # Conventional Commits (Japanese output)
@@ -15,65 +15,65 @@ description: Create Conventional Commits messages written in Japanese. Use when 
 [optional footer]
 ```
 
-## Types
+## Type
 
-| Type | Use |
+| Type | Purpose |
 | --- | --- |
-| `feat` | New feature |
-| `fix` | Bug fix |
+| `feat` | Adding a new feature |
+| `fix` | Fixing a bug |
 | `docs` | Documentation-only changes |
-| `style` | Non-semantic changes (whitespace, formatting, etc.) |
-| `refactor` | Code change that is neither a fix nor a feature |
+| `style` | Changes that do not affect the meaning of the code (whitespace, formatting, etc.) |
+| `refactor` | A code change that neither fixes a bug nor adds a feature |
 | `perf` | Performance improvement |
-| `test` | Add or fix tests |
-| `build` | Build system or external dependency changes |
-| `ci` | CI config/script changes |
-| `chore` | Other chores (version bumps, etc.) |
+| `test` | Adding or correcting tests |
+| `build` | Changes to the build system or external dependencies |
+| `ci` | Changes to CI configuration files or scripts |
+| `chore` | Other chores that fit none of the above (version bumps, etc.) |
 
 ## Procedure
 
-**Always run `git diff --staged --stat` and `git status` first**, then follow the flow below.
+**Always run `git diff --staged --stat` and `git status` first**, then follow this flow.
 
-### Step 1: Check staged files
+### Step 1: Check for staged files
 
 - Staged files **exist** → go to Step 2a
 - Staged files **do not exist** → go to Step 2b
 
-### Step 2a: Commit staged files (regardless of arguments)
+### Step 2a: Commit the staged files (whether or not an argument was given)
 
-1. Run `git diff --staged` to inspect staged changes
-2. Plan the commit using **only those files** (do not stage more)
-3. Present the **commit plan** to the user for approval:
-   - List of files to commit
-   - Proposed commit message
-4. Run `git commit` once approved
+1. Review the staged changes with `git diff --staged`
+2. Plan the commit against **those files only** (do not stage anything else)
+3. Present the **commit plan** to the user and ask for approval:
+   - The list of files to be committed
+   - The proposed commit message
+4. Run `git commit` once the user approves
 
-### Step 2b: Analyze unstaged changes and propose splits
+### Step 2b: Analyze unstaged changes and propose a split
 
-1. Inspect unstaged changes with `git status` and `git diff`
-2. If an argument is given (`/commit <topic>`), narrow to files related to it
-3. Analyze and propose a **commit split plan** at an appropriate granularity:
-   - Files per commit
-   - Proposed message per commit
-   - Rationale for the split (feature unit, fix unit, etc.)
-4. Once approved (or revised), run `git add <files>` → `git commit` in the approved order
-5. Execute multiple commits one at a time, in order
+1. Explore the unstaged changes with `git status` and `git diff`
+2. When an argument is given (`/commit <description>`), narrow down to the files related to that argument
+3. Analyze the changes and present a **proposal that splits them into appropriately sized commits**:
+   - The list of files for each commit
+   - The proposed message for each commit
+   - The rationale for the split (per feature, per fix, etc.)
+4. Once the user approves (or asks for revisions), run `git add <files>` → `git commit` in the approved order
+5. When there are multiple commits, run them one at a time in order
 
 ## Common Rules
 
 - Write in **Japanese**
-- `scope` is optional; include it when it helps clarity
-  - In multi-language repos, include the language (`kotlin`, `typescript`, etc.)
-- No period (`。`) at the end of `description` (length-limited)
-- `description` may use present tense, past tense, or noun-ending form
-- `body` has no length limit; use proper Japanese punctuation and grammar
+- `scope` is not required. Include it when it makes the commit easier to understand
+  - In a multi-language repository, name the language that was changed (`kotlin`, `typescript`, etc.)
+- Do not end `description` with a period, because it has a length limit
+- The verb in `description` may be present tense, past tense, or noun form (体言止め)
+- Write `body` as grammatically correct Japanese prose with appropriate punctuation
 
 ## Rules per Type
 
-### feat (feature add / change / remove)
+### feat (adding, changing, or removing a feature)
 
-- `description` states what feature was added/changed/removed
-- `body` is optional; include background when it clarifies intent
+- `description` states which feature was added, changed, or removed
+- `body` is optional. Include it when describing the background makes the intent easier to understand
 
 ```
 feat(kotlin): トークンを取得するエンドポイントを追加
@@ -87,8 +87,8 @@ feat(kotlin): リクエストのフィールドにタイムゾーンを追加
 
 ### fix (bug fix)
 
-- `description` states what bug was fixed
-- `body` is **required**; state the root cause
+- `description` states which bug was fixed
+- `body` is **required**. State why the bug occurred
 
 ```
 fix(kotlin): 外部APIへのリクエストが失敗するバグを修正
@@ -98,11 +98,11 @@ fix(kotlin): 外部APIへのリクエストが失敗するバグを修正
 
 ### refactor (refactoring)
 
-- Changes to internal structure without changing interface/endpoint behavior
-- For IaC, changes that do not alter infrastructure configuration
-- `description` states how it was changed
-- `body` is **generally required**; state the motivation
-  - May be omitted if the motivation is already in `description`
+- A change that reorganizes internal structure without altering the behavior of interfaces or endpoints
+- For IaC, this covers changes that do not alter the infrastructure configuration
+- `description` states how the code was changed
+- `body` is **required in principle**. State the motivation for the change
+  - It may be omitted when `description` already conveys the motivation
 
 ```
 refactor(kotlin): メソッド名を変更
@@ -114,7 +114,7 @@ refactor(kotlin): メソッド名を変更
 refactor(kotlin): 未使用変数を削除
 ```
 
-### Other type examples
+### Examples of other types
 
 ```
 docs: CLAUDE.mdを更新した
