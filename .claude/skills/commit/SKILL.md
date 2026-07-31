@@ -68,6 +68,21 @@ description: Creates Japanese commit messages that follow the Conventional Commi
 - The verb in `description` may be present tense, past tense, or noun form (体言止め)
 - Write `body` as grammatically correct Japanese prose with appropriate punctuation
 
+## Body Length Guidelines
+
+| Target | Guideline |
+| --- | --- |
+| Single line | Wrap at 40 full-width characters (80 columns) |
+| Whole body | One paragraph, 3-4 lines (120-160 full-width characters) as a rule |
+| Upper bound | More than 300 full-width characters or 2 paragraphs means it is too long |
+
+The wrap width keeps the whole line under 80 columns even after `git log` indents it by 4 spaces. Count a full-width character as 2 columns.
+
+Do not treat cutting characters as the goal. Stay within the guideline by narrowing what goes into the `body`.
+
+- **Include**: why the change was made (motivation), and impact that cannot be read from the diff
+- **Exclude**: an enumeration of what was changed (the `description` and the diff already show it)
+
 ## Rules per Type
 
 ### feat (adding, changing, or removing a feature)
